@@ -1,1 +1,1 @@
-# researchable
+This app was written in React, with material design elements used for styling. However, due to how small the application is, MUI input tools such as FormControl weren't used, and instead inputs and so on are done purely through useState. Prettier was used for formatting, npm was used for package management, and the application was originally created with npx create-react-app.
