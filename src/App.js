@@ -80,6 +80,11 @@ function App() {
 
   return (
     <Grid container spacing={2} sx={{ width: "100%", padding: 2 }}>
+      <Grid item xs={12}>
+        <Typography>
+          https://github.com/GarryBell/GarryBell.github.io
+        </Typography>
+      </Grid>
       <Grid item xs={6}>
         <TextField
           label="Enter strings here"
