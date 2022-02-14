@@ -3,11 +3,8 @@ import React, { useState } from "react";
 import { Typography, TextField, Grid, Button } from "@mui/material";
 
 function App() {
-  // All lines except the first line which have been inputted
+  // All lines which have been inputted
   const [lines, addLine] = useState([]);
-
-  // The first line, against which all others will be compared
-  const [firstLine, setFirstLine] = useState("");
 
   // The current line which the user has inputted
   const [currentLine, setCurrentLine] = useState("");
@@ -17,17 +14,18 @@ function App() {
    * @param {*} input The string for which the Hamming distance is to be found
    * @returns The string representing the Hamming distance of this string form the initial string
    */
-  const getHamming = (input) => {
+  const getHamming = (input, index) => {
     var resultString = "";
+    if (index === 0) {
+      return "";
+    }
+    const previous = lines[index - 1];
     for (var i = 0; i < input.length; i++) {
-      if (input[i] === firstLine[i]) {
+      if (input[i] === previous[i]) {
         resultString += "0";
       } else {
         resultString += "1";
       }
-    }
-    if (input.length < firstLine.length) {
-      resultString += "".padEnd(firstLine.length - input.length, "1");
     }
     return resultString;
   };
@@ -37,7 +35,7 @@ function App() {
    * @param {*} input String to be added, from the TextField
    */
   const addString = (input) => {
-    if (input.target) {
+    if (input.target && input.target.value.length < 6) {
       setCurrentLine(input.target.value);
     }
   };
@@ -46,13 +44,12 @@ function App() {
    * Function is called when `Submit` is pressed, and handles how to process the currently inputted string, before emptying the TextField
    */
   const handleSubmit = () => {
-    if (firstLine === "") {
-      setFirstLine(currentLine);
-      console.log("added?");
-    } else {
-      addLine(lines.concat([currentLine]));
-      getHamming(currentLine);
-    }
+    console.log("added?");
+
+    addLine(
+      lines.concat([currentLine]).sort((a, b) => parseInt(a) - parseInt(b))
+    );
+
     getItems();
     setCurrentLine("");
   };
@@ -61,7 +58,6 @@ function App() {
    * Clears all inputted strings
    */
   const handleReset = () => {
-    setFirstLine("");
     addLine([]);
   };
 
@@ -74,7 +70,7 @@ function App() {
       <>
         <Grid key={index} item xs={12}>
           <Typography>
-            {index + 1}: {line}, {getHamming(line)}
+            {index + 1}: {line} {getHamming(line, index)}
           </Typography>
         </Grid>
       </>
@@ -85,11 +81,8 @@ function App() {
     <Grid container spacing={2} sx={{ width: "100%", padding: 2 }}>
       <Grid item xs={6}>
         <TextField
-          label={
-            firstLine === ""
-              ? "Enter first string here"
-              : "Enter strings to compare"
-          }
+          label="Enter strings here"
+          type="number"
           placeholder="Some string"
           focused
           onChange={addString}
@@ -97,7 +90,11 @@ function App() {
         ></TextField>
       </Grid>
       <Grid item xs={3}>
-        <Button type="button" onClick={handleSubmit}>
+        <Button
+          type="button"
+          onClick={handleSubmit}
+          disabled={currentLine.length !== 5}
+        >
           Submit
         </Button>
       </Grid>
@@ -106,11 +103,7 @@ function App() {
           Reset
         </Button>
       </Grid>
-      {firstLine !== "" ? (
-        <Grid item xs={3}>
-          <Typography>First line: {firstLine}</Typography>
-        </Grid>
-      ) : null}
+
       {getItems()}
     </Grid>
   );
