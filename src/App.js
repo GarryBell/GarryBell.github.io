@@ -12,6 +12,7 @@ function App() {
   /**
    *
    * @param {*} input The string for which the Hamming distance is to be found
+   * @param {*} index The index of this string, in the array of strings
    * @returns The string representing the Hamming distance of this string form the initial string
    */
   const getHamming = (input, index) => {
