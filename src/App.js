@@ -45,8 +45,6 @@ function App() {
    * Function is called when `Submit` is pressed, and handles how to process the currently inputted string, before emptying the TextField
    */
   const handleSubmit = () => {
-    console.log("added?");
-
     addLine(
       lines.concat([currentLine]).sort((a, b) => parseInt(a) - parseInt(b))
     );
